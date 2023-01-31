@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/modles/news_modle.dart';
+import 'package:newsapp/api/models/news_api.dart';
+import 'package:newsapp/router/app_router.dart';
+import 'package:newsapp/screens/webView_screen.dart';
 
-class DetailsScreen extends StatefulWidget {
-  DetailsScreen(this.data, {Key? key}) : super(key: key);
-  NewsData data;
+class DetailsScreen extends StatelessWidget {
+  Articles articles;
 
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
+  DetailsScreen(this.articles, {Key? key}) : super(key: key);
 
-class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,50 +15,105 @@ class _DetailsScreenState extends State<DetailsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.orange),
+        iconTheme: const IconThemeData(color: Colors.orange),
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: ListView(
           children: [
             Text(
-              widget.data.title!,
-              style: TextStyle(
+              articles.title!,
+              style: const TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8.0,
             ),
             Text(
-              widget.data.author!,
-              style: TextStyle(
+              articles.source!.name!,
+              style: const TextStyle(
                 color: Colors.black54,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             Hero(
-              tag: "${widget.data.title!}",
+              tag: "${articles.title!}",
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30.0),
-                child: Image.network(widget.data.urlToImage!),
+                child: articles.urlToImage != null
+                    ? Image.network(articles.urlToImage!)
+                    : Image.asset('images/no_image.jpg'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
-            Text(
-              widget.data.content!,
-              style: TextStyle(
-                color: Colors.black54,
-              ),
+            articles.description != null
+                ? Text(
+                    articles.description!,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                    ),
+                  )
+                : const Text('No description'),
+            const SizedBox(
+              height: 20,
             ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            articles.publishedAt != null
+                ? Text(
+                    articles.publishedAt!,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                    ),
+                  )
+                : const Text('No publishedAt'),
+            const SizedBox(
+              height: 20,
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            articles.content != null
+                ? Text(
+                    articles.content!,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                    ),
+                  )
+                : const Text('No content'),
+            const SizedBox(
+              height: 20,
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // AppRouter.goToScreen(WebViewScreen(articles.url!));
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     minimumSize: const Size(300, 58),
+            //     primary: const Color(0xFF6A90F2),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //   ),
+            //   child: const Text('GO TO Location By Link'),
+            // ),
           ],
         ),
       ),
     );
   }
 }
+
+/*DetailsScreen
+Consumer<ApiProvider>(
+      builder: (context, provider, widget) {
+        return
+      },
+    );*/
